@@ -8,7 +8,7 @@ the location of an IP.
 
 Requirements & Capabilities:
 
-* **Given an IP address, the response returns the associated country name**
+* **Given an IP address, return the associated country name**
 
 * **Support multiple vendors** (ex.: https://ipstack.com/)
 

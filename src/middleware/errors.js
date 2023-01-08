@@ -1,6 +1,8 @@
 // eslint-disable-next-line no-unused-vars
+const logger = require('../logger');
+
 module.exports = (err, req, res, next) => {
-  console.log(err);
+  logger.error(err);
 
   // Authentication failure
   if (err.authFailed) {
