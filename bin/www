@@ -14,7 +14,7 @@ const http = require('http');
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(config.port);
+const port = normalizePort(config.PORT);
 app.set('port', port);
 
 /**
@@ -33,7 +33,7 @@ server.listen(port, err => {
     return;
   }
   logger.info(
-      `⚡️  Server started: http://localhost:${port}`
+    `⚡️  Server started: http://localhost:${port}`
   );
 });
 server.on('error', onError);

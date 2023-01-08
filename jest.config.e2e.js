@@ -4,4 +4,5 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
   transform: {},
   modulePathIgnorePatterns: ['.cache'],
+  setupFiles: ['<rootDir>/.jest/setEnvVars.js'],
 };

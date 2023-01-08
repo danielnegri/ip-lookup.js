@@ -8,7 +8,7 @@ the location of an IP.
 
 Requirements & Capabilities:
 
-* **Given an IP address, the response returns the associated country name**
+* **Given an IP address, return the associated country name**
 
 * **Support multiple vendors** (ex.: https://ipstack.com/)
 
@@ -25,7 +25,7 @@ Quick Start
 
 #### Requirements
 
-* Node.js >= v16.17.1
+* Node.js >= v16.0.0
 * [Yarn](https://classic.yarnpkg.com/)
 * [Docker](https://docs.docker.com/get-docker/)
 

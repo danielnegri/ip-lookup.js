@@ -9,6 +9,7 @@ app
   .use(loggerMiddleware)
   // Parse JSON
   .use(express.json())
+
   // Enable routes
   .use('/', indexRouter)
 

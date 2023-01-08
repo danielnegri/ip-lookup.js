@@ -13,7 +13,7 @@ const levels = {
   debug: 4,
 };
 
-const level = () => config.log_level;
+const level = () => config.LOG_LEVEL;
 
 // Define different colors for each level.
 // Colors make the log message more visible,
