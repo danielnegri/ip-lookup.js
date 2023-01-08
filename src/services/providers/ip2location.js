@@ -3,37 +3,64 @@ const axios = require('axios');
 const { RateLimiter } = require('limiter');
 
 const { IP2LOCATION_URL } = require('../../constants');
-const { IP2LOCATION_KEY, IP2LOCATION_RATE_PER_SECOND } = require('../../config');
 const logger = require('../../logger');
 
-// Free ip2location plan is restricted to 30,000 requests per month.
-const limiter = new RateLimiter({
-  tokensPerInterval: IP2LOCATION_RATE_PER_SECOND,
-  day: 'second',
-});
+class IP2Location {
+  /**
+   * Create an instance of IP2Location
+   *
+   * @param {String} apiKey The API key
+   * @param {Object} rateLimit The amount of tokens per second limitation
+   *
+   * @returns {Axios} A new instance of IP2Location
+   */
+  constructor(apiKey, rateLimit) {
+    if (!apiKey) {
+      throw Error('The "IP2LOCATION_KEY" environment variable is required');
+    }
 
-// Lookup returns the associated country name of an IP.
-// It requires the API key and supports both IPv4 and IPv6 addresses.
-// For more information: https://www.ip2location.io/ip2location-documentation
-async function lookup(ip) {
-  logger.info(`IP2Location: Lookup ${ip}`);
-
-  if (!limiter.tryRemoveTokens(1)) {
-    throw new Error('Exceeded quota');
+    this.apiKey = apiKey;
+    this.limiter = new RateLimiter({
+      tokensPerInterval: rateLimit,
+      day: 'second',
+    });
   }
 
-  const query = querystring.stringify({
-    ip,
-    key: IP2LOCATION_KEY,
-  });
+  /**
+   * Lookup IPv4 and IPv6 addresses.
+   * For more information: https://www.ip2location.io/ip2location-documentation
+   *
+   * @param {String} ip The IP address
+   *
+   * @returns {String} The associated country name
+   */
+  async lookup(ip) {
+    logger.info(`IP2Location Lookup ${ip}`);
 
-  return axios({
-    url: `${IP2LOCATION_URL}/?${query}`,
-    method: 'GET',
-    'Content-Type': 'application/json',
-  }).then((response) => {
-    logger.info(response);
-  });
+    if (!this.limiter.tryRemoveTokens(1)) {
+      throw new Error('Exceeded quota');
+    }
+
+    const query = querystring.stringify({
+      ip,
+      key: this.apiKey,
+    });
+
+    const { country_name } = await axios({
+      url: `${IP2LOCATION_URL}/?${query}`,
+      method: 'GET',
+      'Content-Type': 'application/json',
+    })
+      .then((result) => {
+        return result.data;
+      })
+      .catch((err) => {
+        logger.error(`Failed to lookup IP ${ip}`, err);
+        throw err;
+      });
+
+    return { country_name };
+  }
 }
 
-module.exports = lookup;
+module.exports = IP2Location;

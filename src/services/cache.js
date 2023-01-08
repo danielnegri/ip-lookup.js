@@ -14,10 +14,10 @@ module.exports.getCachedValueOrGenerateSerially = async (key, generatorFn, ttl) 
   const result = Promise.resolve(generatorFn());
   result
     .then((value) => {
-      logger.debug('Fetched value from key', { key, value });
+      logger.debug(`Fetched value from key ${key}:${value}`);
     })
     .catch((err) => {
-      logger.error('Unable to fetch value for key', { key, err });
+      logger.error(`Unable to fetch value for key ${key}`, err);
       cache.del(key);
     });
 
