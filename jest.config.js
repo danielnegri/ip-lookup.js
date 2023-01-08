@@ -6,5 +6,6 @@
 module.exports = {
   rootDir: __dirname,
   modulePathIgnorePatterns: ['.cache'],
+  setupFiles: ['<rootDir>/.jest/setEnvVars.js'],
   testMatch: ['/**/__tests__/**/*.[jt]s?(x)'],
 };

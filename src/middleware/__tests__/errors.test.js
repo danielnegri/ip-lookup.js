@@ -6,10 +6,6 @@ describe('Errors', () => {
     let mockResponse = {};
     const nextFunction = jest.fn();
 
-    beforeAll(() => {
-      jest.spyOn(console, 'log').mockImplementation(() => {});
-    });
-
     beforeEach(() => {
       mockRequest = {};
       mockResponse = {
@@ -25,8 +21,8 @@ describe('Errors', () => {
       const err = {};
 
       const expectedResponse = {
-        error: 500,
-        message: 'An internal error occurred.',
+        message: 'Internal Server Error',
+        status_code: 500,
       };
 
       errors(err, mockRequest, mockResponse, nextFunction);

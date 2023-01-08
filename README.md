@@ -25,7 +25,7 @@ Quick Start
 
 #### Requirements
 
-* Node.js >= v16.17.1
+* Node.js >= v16.0.0
 * [Yarn](https://classic.yarnpkg.com/)
 * [Docker](https://docs.docker.com/get-docker/)
 

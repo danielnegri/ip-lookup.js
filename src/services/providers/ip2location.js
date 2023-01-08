@@ -4,6 +4,8 @@ const { RateLimiter } = require('limiter');
 
 const { IP2LOCATION_URL } = require('../../constants');
 const logger = require('../../logger');
+const { IP2LOCATION_TIMEOUT } = require('../../config');
+const { InternalServerError, TooManyRequestsError } = require('../../errors');
 
 class IP2Location {
   /**
@@ -11,10 +13,11 @@ class IP2Location {
    *
    * @param {String} apiKey The API key
    * @param {Object} rateLimit The amount of tokens per second limitation
+   * @param {Number} timeout The number of milliseconds before client request times out. (default: IP2LOCATION_TIMEOUT)
    *
    * @returns {Axios} A new instance of IP2Location
    */
-  constructor(apiKey, rateLimit) {
+  constructor(apiKey, rateLimit, timeout) {
     if (!apiKey) {
       throw Error('The "IP2LOCATION_KEY" environment variable is required');
     }
@@ -22,8 +25,11 @@ class IP2Location {
     this.apiKey = apiKey;
     this.limiter = new RateLimiter({
       tokensPerInterval: rateLimit,
-      day: 'second',
+      interval: 'second',
     });
+
+    this.timeout = timeout || IP2LOCATION_TIMEOUT;
+    this.lookup = this.lookup.bind(this);
   }
 
   /**
@@ -31,14 +37,16 @@ class IP2Location {
    * For more information: https://www.ip2location.io/ip2location-documentation
    *
    * @param {String} ip The IP address
+   * @param {AbortSignal} abortSignal The signal that allows to abort a request
    *
    * @returns {String} The associated country name
    */
-  async lookup(ip) {
-    logger.info(`IP2Location Lookup ${ip}`);
+  async lookup(ip, abortSignal) {
+    logger.info(`IP2Location - Lookup ${ip}`);
 
-    if (!this.limiter.tryRemoveTokens(1)) {
-      throw new Error('Exceeded quota');
+    const limiter = this.limiter;
+    if (!limiter.tryRemoveTokens(1)) {
+      throw new TooManyRequestsError('Exceeded quota');
     }
 
     const query = querystring.stringify({
@@ -50,13 +58,15 @@ class IP2Location {
       url: `${IP2LOCATION_URL}/?${query}`,
       method: 'GET',
       'Content-Type': 'application/json',
+      signal: abortSignal,
+      timeout: this.timeout,
     })
       .then((result) => {
         return result.data;
       })
       .catch((err) => {
-        logger.error(`Failed to lookup IP ${ip}`, err);
-        throw err;
+        logger.error(`IP2Location - Failed to lookup IP ${ip}`, err);
+        throw new InternalServerError();
       });
 
     return { country_name };

@@ -4,12 +4,15 @@ const MockAdapter = require('axios-mock-adapter');
 
 const { IP2LOCATION_URL } = require('../../../constants');
 const IP2Location = require('../ip2location');
+const { TooManyRequestsError } = require('../../../errors');
 
 describe('IP2Location', () => {
   let mock;
+  let abortController;
 
   beforeAll(() => {
     mock = new MockAdapter(axios);
+    abortController = new AbortController();
   });
 
   afterEach(() => {
@@ -46,7 +49,7 @@ describe('IP2Location', () => {
       mock.onGet(url).reply(200, sample);
 
       const provider = new IP2Location(params.key, 1);
-      const result = await provider.lookup(params.ip);
+      const result = await provider.lookup(params.ip, abortController.signal);
 
       expect(mock.history.get[0].url).toEqual(url);
       expect(result).toEqual({ country_name: 'United States of America' });
@@ -65,7 +68,7 @@ describe('IP2Location', () => {
       mock.onGet(url).networkErrorOnce();
 
       const provider = new IP2Location('secret', 1);
-      expect(provider.lookup('8.8.8.8')).rejects.toThrow();
+      expect(provider.lookup('8.8.8.8', abortController.signal)).rejects.toThrow();
       expect(mock.history.get[0].url).toEqual(url);
     });
   });
@@ -73,7 +76,8 @@ describe('IP2Location', () => {
   describe('Exceeded quota', () => {
     it('should return error', async () => {
       const provider = new IP2Location('secret', 0);
-      expect(provider.lookup('8.8.8.8')).rejects.toThrow('Exceeded quota');
+      const expected = new TooManyRequestsError('Exceeded quota');
+      expect(provider.lookup('8.8.8.8')).rejects.toThrow(expected);
     });
   });
 });
