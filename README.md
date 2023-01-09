@@ -62,6 +62,19 @@ $ curl http://localhost:3000?ip=109.207.79.75
 {"country_name":"Israel"}
 ```
 
+#### Testing
+
+```bash
+# All
+$ yarn test
+
+# Unit testing
+$ yarn test:unit
+
+# End-to-End
+$ yarn test:e2e
+```
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for details on submitting patches and the contribution workflow.
