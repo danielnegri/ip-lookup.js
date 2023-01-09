@@ -3,8 +3,7 @@
 </p>
 
 This challenge demonstrates a simple API which purpose is to provide the country name associated
-with an IP address. The server exposes a lookup endpoint that rely on multiple vendors to provide
-the location of an IP.
+with an IP address. The server exposes a lookup endpoint that rely on multiple vendors for redundancy.
 
 Requirements & Capabilities:
 
