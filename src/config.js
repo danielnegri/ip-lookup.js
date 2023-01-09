@@ -12,7 +12,6 @@ if (!envFound) {
 
 module.exports = {
   CACHE_TTL: process.env.CACHE_TTL || 3600,
-  ENVIRONMENT: process.env.NODE_ENV || 'development',
   IP2LOCATION_KEY: process.env.IP2LOCATION_KEY,
   IP2LOCATION_RATE_PER_SECOND: process.env.IP2LOCATION_RATE_PER_SECOND || 10,
   IP2LOCATION_TIMEOUT: process.env.IP2LOCATION_TIMEOUT || 10000,
