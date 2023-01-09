@@ -8,8 +8,7 @@ const stream = {
 };
 
 const loggerMiddleware = morgan(
-  ':remote-addr :method :url status=:status content-length=:res[content-length] - response-time=:response-time ms', // Options: in this case, I overwrote the stream and the skip logic.
-  // See the methods above.
+  ':remote-addr :method :url status=:status content-length=:res[content-length] response-time=:response-time ms',
   { stream }
 );
 
