@@ -18,11 +18,11 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "start": "nodemon --inspect -w src bin/www",
-    "production": "NODE_ENV=production node bin/www",
+    "dev": "nodemon --inspect -w src bin/www",
+    "start": "node bin/www",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.js\"",
-    "test": "yarn run test:unit && yarn run test:e2e",
+    "test": "yarn run test:coverage && yarn run test:e2e",
     "test:coverage": "yarn run test:unit --coverage",
     "test:e2e": "FORCE_COLOR=true jest --config jest.config.e2e.js --verbose --runInBand --testRunner=jest-circus/runner --forceExit --detectOpenHandles",
     "test:unit": "jest --verbose"

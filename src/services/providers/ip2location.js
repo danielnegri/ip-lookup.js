@@ -18,7 +18,7 @@ class IP2Location {
    * @returns {Axios} A new instance of IP2Location
    */
   constructor(apiKey, rateLimit, timeout) {
-    if (!apiKey) {
+    if (typeof apiKey !== 'string' || apiKey.trim().length === 0) {
       throw Error('The "IP2LOCATION_KEY" environment variable is required');
     }
 

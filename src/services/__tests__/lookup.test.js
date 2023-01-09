@@ -26,7 +26,7 @@ describe('Lookup', () => {
       expect(result).toEqual(expect.arrayContaining(expected));
     });
 
-    it('should fall back', async () => {
+    it('should fallback', async () => {
       const sample = { ip: '45.55.195.96', country_name: 'United States of America' };
       mock.onGet(/ip2location/).replyOnce(500, sample);
       mock.onGet(/ipstack/).replyOnce(200, sample);

@@ -17,7 +17,7 @@ class IPstack {
    * @returns {Axios} A new instance of IPstack
    */
   constructor(apiKey, rateLimit, timeout) {
-    if (!apiKey) {
+    if (typeof apiKey !== 'string' || apiKey.trim().length === 0) {
       throw Error('The "IPSTACK_KEY" environment variable is required');
     }
 
