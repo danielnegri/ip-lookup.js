@@ -1,13 +1,23 @@
 const CircuitBreaker = require('opossum');
 const NodeCache = require('node-cache');
 
-const { CACHE_TTL, IP2LOCATION_KEY, IP2LOCATION_RATE_PER_SECOND, IP2LOCATION_TIMEOUT } = require('../config');
+const {
+  CACHE_TTL,
+  IP2LOCATION_KEY,
+  IP2LOCATION_RATE_PER_SECOND,
+  IP2LOCATION_TIMEOUT,
+  IPSTACK_KEY,
+  IPSTACK_RATE_PER_SECOND,
+  IPSTACK_TIMEOUT,
+} = require('../config');
 const logger = require('../logger');
-const IP2Location = require('./providers/ip2location');
 const Lock = require('./lock');
+const IP2Location = require('./providers/ip2location');
+const IPstack = require('./providers/ipstack');
 
 const cache = new NodeCache({ stdTTL: CACHE_TTL });
 const ip2Location = new IP2Location(IP2LOCATION_KEY, IP2LOCATION_RATE_PER_SECOND, IP2LOCATION_TIMEOUT);
+const ipstack = new IPstack(IPSTACK_KEY, IPSTACK_RATE_PER_SECOND, IPSTACK_TIMEOUT);
 const lock = new Lock();
 
 const lookupFromAPI = async (ip) => {
@@ -18,6 +28,8 @@ const lookupFromAPI = async (ip) => {
     timeout: IP2LOCATION_TIMEOUT,
   };
   const breaker = new CircuitBreaker(ip2Location.lookup, options);
+  breaker.fallback(ipstack.lookup);
+
   const result = await breaker.fire(ip, abortController.signal);
   logger.debug(`Lookup - Found IP ${ip}: ${JSON.stringify(result)}`);
 
@@ -48,6 +60,10 @@ const lookup = async (ip) => {
       logger.debug(`Cache - Setting ${key}`);
       cache.set(key, value, CACHE_TTL);
       return value;
+    })
+    .catch((err) => {
+      cache.del(key);
+      return Promise.reject(err);
     })
     .finally(() => {
       lock.release();

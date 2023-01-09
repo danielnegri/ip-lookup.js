@@ -17,7 +17,7 @@ describe('API End to End', () => {
   describe('Test index', () => {
     test('GET /', async () => {
       const sample = { ip: '45.55.195.96', country_name: 'Narnia' };
-      mock.onGet(/ip=(?:[0-9]{1,3}\.){3}[0-9]{1,3}/).replyOnce(200, sample);
+      mock.onGet(/45\.55\.195\.96/).replyOnce(200, sample);
 
       const response = await request(app)
         .get(`/?ip=${sample.ip}`)
