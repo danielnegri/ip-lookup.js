@@ -29,6 +29,40 @@ Quick Start
 * [Yarn](https://classic.yarnpkg.com/)
 * [Docker](https://docs.docker.com/get-docker/)
 
+```bash
+# Clone repository
+$ git clone https://github.com/danielnegri/forter-challenge.git 
+
+# Install dependencies
+$ yarn install
+
+# Make sure to edit and include the API keys (dotenv)
+$ cp .env.example .env
+```
+
+#### Running the server in development
+
+```bash
+$ yarn start
+```
+
+#### Running the server with Docker (Compose)
+
+```bash
+$ docker-compose up 
+```
+
+#### Local Development
+
+```bash
+# Start (nodemon)
+$ yarn dev
+
+# Testing with a random IP
+$ curl http://localhost:3000?ip=109.207.79.75
+{"country_name":"Israel"}
+```
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for details on submitting patches and the contribution workflow.
