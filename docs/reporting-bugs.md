@@ -41,6 +41,6 @@ $ kill -QUIT $PID
 $ cat package.json | grep version
 ```
 
-[project-issue]: https://github.com/danielnegri/forter-challenge.js/issues/new
+[project-issue]: https://github.com/danielnegri/ip-lookup.js/issues/new
 
 [filing-good-bugs]: http://fantasai.inkedblade.net/style/talks/filing-good-bugs/

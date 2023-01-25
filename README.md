@@ -1,5 +1,5 @@
 <p align="center" style="text-align:center;">
-  <img alt="Forter Logo" src="docs/assets/logo.png" width="499" />
+  <img alt="Logo" src="docs/assets/logo.png" width="200" />
 </p>
 
 This challenge demonstrates a simple API which purpose is to provide the country name associated
@@ -30,7 +30,7 @@ Quick Start
 
 ```bash
 # Clone repository
-$ git clone https://github.com/danielnegri/forter-challenge.git 
+$ git clone https://github.com/danielnegri/ip-lookup.js.git 
 
 # Install dependencies
 $ yarn install
