@@ -5,17 +5,17 @@ info:
     This is a simple API which purpose is to provide the country name associated
       with an IP address. The server exposes a lookup endpoint that rely on multiple vendors to provide
       the location of an IP.
-      
+
       Requirements & Capabilities:
-      
+
       * **Given an IP address, return the associated country name**
-      
+
       * **Support multiple vendors** (ex.: https://ipstack.com/)
-      
+
       * **Naive cache for IP addresses previously requested**
-      
+
       * **Global configurable rate limits of the server per vendor per hour**
-      
+
       _If the rate limit of one vendor has exceeded, the API fallback to other vendor(s). If the result is not in cache
       and the rate limit is exceeded for all vendors, it returns an error message._
   contact:
@@ -33,7 +33,7 @@ paths:
         - ip
       summary: Lookup an IP address
       description: Returns a the country name
-      operationId: getPetById
+      operationId: lookup
       parameters:
         - name: ip
           in: query
@@ -47,14 +47,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Lookup'          
+                $ref: '#/components/schemas/Lookup'
         '400':
           description: Invalid IP address
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequestError'
-                
+
         '429':
           description: Too Many Requests
           content:
@@ -76,7 +76,7 @@ components:
         country_name:
           type: string
           example: United States
-          
+
     InternalServerError:
       type: object
       properties:
@@ -87,7 +87,7 @@ components:
           type: integer
           format: int32
           example: 500
-    
+
     BadRequestError:
       type: object
       properties:
@@ -101,7 +101,7 @@ components:
         details:
           type: object
           nullable: true
-          
+
     TooManyRequestsError:
       type: object
       properties:
@@ -112,4 +112,3 @@ components:
           type: integer
           format: int32
           example: 429
-  
